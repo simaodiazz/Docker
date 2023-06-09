@@ -96,8 +96,40 @@ São uma funcionabilidade do Kernel Linux que permite controlar e limitar o uso 
 
 ### Union Filesystems
 
-Os sistemas `Union Filesystems` são tecnologias que permitem combinar vários sitemas de arquivos em uma única visualização lógica, criando uma imagem de sistema de arquivos composta por várias camadas ou snapshots.
+Os sistemas `Union Filesystems` são tecnologias que permitem combinar vários sitemas de arquivos em uma única visualização lógica, criando uma imagem de sistema de arquivos composta por várias `camadas` ou `snapshots`.
+
+O principal objetivo dos sistemas de arquivos de união é fornecer uma forma de sobrepor os sitemas de base com os sistemas de arquivos. Sem modificar diretamente o sistema de arquivo base.
+
+Existem diferentes implementações de sistemas de arquivos de união.
+
+1. UnionFS suporte operações de leitura e gravação em qualquer camada superior, enquanto as camadas inferiores permanecem somento leitura. Isso é particularmente útil em ambientes de contêineres. Isso é particularmente útil em ambientes de contêineres, onde você pode ter uma camada base com imagem do sistema operativo e camdas superiores para personalizações ou alterações específicas do contêiner.
+
+2. OverlayFS cria uma camada de sobreposição chamda de `overlay` que contém as alterações feitas nos sistemas de arquivos superiores em relação aos sistemas de arquivos base. As alterações são registradas em uma camda separada. preservando os sitemas de arquivos base de forma somente leitura. Isso permite que você tenha uma base imútavel e camadas superiores para personalizações, aplicação de patches ou alterações no contêiner.
+
+Uma das principais vantagens do OverlayFS é a eficiência no armazenamento. Ele utiliza um mecanismo `delta` para registrar somente as alterações feitas nos sistemas de arquivos superiores.
 
 #### What is Snapshots?
 
 Uma snapshot é uma representação imutável de um sistema de arquivos em um determinado momento. Ele preserva a integridade dos dados e permite que acesso ou restaure o sistema de arquivos em um estado específico, mesmo que o sistema orignal tenha sido modificado.
+
+#### Difference of Base File Systems and Additional File Systems?
+
+O `sistema de arquivos base` é a `camada inferior` ou `camada base` da imagem do sistema de arquivos. Geralmente esta camada contém o sistema operativo ou a imagem de base do contêiner. Ela pode ser somente de `leitura` e serve como fundação do sistema de arquivos.
+
+Os `sistemas de arquivos adicionais` são as `camadas superiores` que são adicionadas em cima do sistema de arquivos base. Essas camadas podem conter arquivos, diretórios, configurações e outras personalizações específicas do contêiner. Elas podem ser criadas para atender a necessidades específicas do aplicativo em execução no contêiner.
+
+## Basics
+
+### Components
+
+O Docker é composto por vários componentes que desempenham funções diferentes para permitir a criação, execução e gerenciamento de contêineres.
+
+1. Docker Engine é o componente fundamental do Docker. Ele é responsável pela criação e execução dos contêineres.
+
+    + Docker deamon é um serviço em segundo plano que gerencia os contêineres e as imagens. Ele recebe comandos do cliente Docker e executa as operações solicitadas, como criar, iniciar, parar e remover, contêineres.
+
+    + Docker CLI é uma interface de linha de comando que permite aos utilizadores interagir com o Docker Engine. Ele oferece comandos para criar, gerenciar e monitorar contêineres, imagens, redes e volumes.
+
+    + Docker API é uma interface de programação de aplicativos API que permite que outros aplicativos e ferramentas interajam com o Docker Engine de forma programática.
+
+2. Imagens do Docker são os blocos de construção dos contêineres. Elas são arquivos somento leitura que contêm tudo o que é necessário para executar um processo dentro de um contêiner, incluindo o sistema operativo, as bibliotecas, as depêndencias e o próprio aplicativo. As imagens são criadas a partir de um arquivo de definição chamado `Dockerfile` e são armazenadas em um registro.
